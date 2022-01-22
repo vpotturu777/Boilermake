@@ -4,16 +4,18 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Lectures from "./pages/Lectures";
+import Courses from "./pages/Courses";
 import Notes from "./pages/Notes";
+import Lectures from "./pages/Lectures";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route path=":college" element={<Lectures />}/>
-          <Route path=":college/:lecture" element={<Notes />}/>
+          <Route path=":college" element={<Courses />}/>
+          <Route path=":college/:course" element={<Notes />}/>
+          <Route path=":college/:course/:lecture" element={<Lectures />}/>
           <Route
             path="*"
             element={
