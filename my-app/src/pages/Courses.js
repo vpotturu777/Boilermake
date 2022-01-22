@@ -56,6 +56,7 @@ const Courses = () => {
   };
 
   const fetchCourses = async () => {
+    setLoading(true);
     try {
       // console.log(`${API_BASE}${COURSES}${TITLE_CONTAINS(text)}${ASCENDING_NUMBER}`);
       const response = await fetch(
@@ -69,6 +70,7 @@ const Courses = () => {
     } catch (err) {
       console.log("There was an err", err);
     }
+    setLoading(false);
   };
 
   const handleSearchOnDelay = (event) => {
@@ -86,30 +88,36 @@ const Courses = () => {
   return (
     <div>
       {loading ? (
-        <CircularProgress />
+        <CircularProgress style={{ margin: 64 }} />
       ) : (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{ margin: 16 }}>
           <TextField
             label="Search for courses"
             value={text}
             onChange={handleSearchOnDelay}
+            fullWidth
+            style={{ maxWidth: 500 }}
           />
         </form>
       )}
       <div className="course-list">
-        {courses.map((course) => (
-          <Link
-            to={`/${params.college}/${
-              subjects[course.subjectid].abbreviation
-            }-${course.number}`}
-            key={course.subjectid}
-          >
-            <Course
-              {...course}
-              subject={subjects[course.subjectid].abbreviation}
-            />
-          </Link>
-        ))}
+        {courses.length ? (
+          courses.map((course) => (
+            <Link
+              to={`/${params.college}/${
+                subjects[course.subjectid].abbreviation
+              }-${course.number}`}
+              key={course.id}
+            >
+              <Course
+                {...course}
+                subject={subjects[course.subjectid].abbreviation}
+              />
+            </Link>
+          ))
+        ) : (
+          <div>No matching classes (╥︣﹏᷅╥)</div>
+        )}
       </div>
     </div>
   );
