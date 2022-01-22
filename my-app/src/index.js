@@ -14,7 +14,6 @@ ReactDOM.render(
         <Route path="/" element={<App />}>
           <Route path=":college" element={<Lectures />}/>
           <Route path=":college/:lecture" element={<Notes />}/>
-
           <Route
             path="*"
             element={
