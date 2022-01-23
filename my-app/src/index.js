@@ -15,9 +15,9 @@ ReactDOM.render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route path="" element={<Schools />}/>
-          <Route path=":college" element={<Courses />}/>
-          <Route path=":college/:course" element={<Notes />}/>
-          <Route path=":college/:course/:lecture" element={<Lectures />}/>
+          <Route path=":p/:college" element={<Courses />}/>
+          <Route path=":p/:college/:course" element={<Notes />}/>
+          <Route path=":p/:college/:course/:lecture" element={<Lectures />}/>
           <Route
             path="*"
             element={
