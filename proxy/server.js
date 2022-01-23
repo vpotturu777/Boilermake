@@ -13,8 +13,9 @@ app.use(morgan('dev'));
 
 app.use('/', proxy('https://api.purdue.io'))
 
-const server = app.listen(4200, () => {
-  console.log("Running on port " + 4200);
+const PORT = process.env.PORT || 4200
+const server = app.listen(PORT, () => {
+  console.log("Running on port " + PORT);
 });
 
 

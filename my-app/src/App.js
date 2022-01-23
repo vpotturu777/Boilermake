@@ -4,6 +4,7 @@ import { uid } from "uid";
 import { set, ref, onValue, remove, update } from "firebase/database";
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import Nav from "./nav";
 
 function App() {
   const [todo, setTodo] = useState("");
@@ -63,6 +64,7 @@ function App() {
 
   return (
     <div className="App">
+      <Nav/>
       <input type="text" value={todo} onChange={handleTodoChange} />
       {isEdit ? (
         <>

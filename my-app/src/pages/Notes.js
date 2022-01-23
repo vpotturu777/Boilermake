@@ -8,8 +8,8 @@ const Notes = () => {
   return (
     <div>
       {lectures.map((lecture) => (
-        <div>
-          <Typography variant="h5">
+        <div style={{minHeight: '200px'}}>
+          <Typography variant="h4" fontWeight={500}>
             {`Lecture ${lecture}`}
           </Typography>
 
