@@ -8,7 +8,7 @@ import "./courses.css";
 const PURDUE = {
   title: "Purdue University",
   location: "West Lafayette, IN",
-  imgSrc:"/pic.jpg"
+  imgSrc:"pic.jpg"
 };
 
 const Schools = () => {
@@ -60,7 +60,7 @@ const Schools = () => {
           </form>
           <div className="course-list">
             {schools.map((school, index) => (
-              <Link to="/purdue" key={index}>
+              <Link to="/Boilermake/purdue" key={index}>
                 <School {...school} />
               </Link>
             ))}

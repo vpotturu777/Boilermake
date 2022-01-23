@@ -167,7 +167,7 @@ const Courses = () => {
 
               return (
                 <Link
-                  to={`/${params.college}/${
+                  to={`/Boilermake/${params.college}/${
                     subjects[course.subjectid].abbreviation
                   }-${course.number}`}
                   key={course.id}
