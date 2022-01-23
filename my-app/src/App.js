@@ -5,7 +5,8 @@ import { set, ref, onValue, remove, update } from "firebase/database";
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Nav from "./nav";
-
+import theme from "./theme"
+import { ThemeProvider } from '@mui/material/styles';
 function App() {
   // const [todo, setTodo] = useState("");
   // const [todos, setTodos] = useState([]);
@@ -63,10 +64,12 @@ function App() {
   // };
 
   return (
-    <div className="App">
-      <Nav/>
-      <Outlet/>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Nav />
+        <Outlet />
+      </div>
+    </ThemeProvider>
   );
 }
 

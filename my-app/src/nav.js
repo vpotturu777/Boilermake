@@ -33,7 +33,7 @@ export default function Nav() {
     setAnchorElUser(null);
   };
 
-  const pages = ['Products', 'Pricing', 'Blog', "iOS App"];
+  const pages = ['Products', 'Merch', 'Blog', "iOS App"];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
   return (
@@ -46,7 +46,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
             component="div"
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
           >
-            LOGO
+            NOTE THING
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -91,7 +91,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
             component="div"
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
           >
-            LOGO
+            NOTE THING
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (

@@ -1,0 +1,15 @@
+.disabled {
+
+}
+
+.school:hover {
+  /* background-color: rgb(168, 168, 168); */
+  scale:1.05;
+  z-index: 100;
+  transition: scale 300ms ease;
+  box-shadow: 0 4px 16px #797979;
+}
+
+.disabled {
+  filter: grayscale(1)
+}

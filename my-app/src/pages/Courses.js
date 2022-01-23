@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { TextField, CircularProgress, Typography } from "@mui/material";
+import {
+  TextField,
+  CircularProgress,
+  Typography,
+  Pagination,
+} from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 
 import Course from "../components/Course";
@@ -12,6 +17,8 @@ const SUBJECT_EQUAL = (subj) => `$filter=Subject/Abbreviation eq '${subj}'`;
 const NUMBER_CONTAINS = (num) => `contains(Number,'${num}')`;
 
 const ASCENDING_NUMBER = `&$orderby=Number asc`;
+
+const COLORS = ["#fff5f5", "#fffff5", "#f5fff5", "#f5fbff", "#faf5ff"];
 /**
  *
  * {
@@ -38,11 +45,19 @@ const splitSubjectNumber = (subjectNumber) => {
 
 const Courses = () => {
   const [text, setText] = useState("");
+  const [allCourses, setAllCourses] = useState([]);
   const [courses, setCourses] = useState([]);
+
   const [subjects, setSubjects] = useState(null);
   const delayTimer = useRef(null);
   const [loading, setLoading] = useState(false);
   const params = useParams();
+  const [page, setPage] = React.useState(1);
+
+  useEffect(() => {
+    console.log(allCourses.length)
+    setCourses(allCourses.slice(69 * (page-1), 69 * page));
+  }, [allCourses, page]);
 
   useEffect(() => {
     console.log(`${API_BASE}${SUBJECTS}`);
@@ -60,16 +75,14 @@ const Courses = () => {
   }, []);
 
   const clean = (rawList) => {
-    return rawList
-      .slice(0, 69)
-      .map((rawItem) =>
-        Object.fromEntries(
-          Object.entries(rawItem).map(([key, value]) => [
-            key.toLowerCase(),
-            value,
-          ])
-        )
-      );
+    return rawList.map((rawItem) =>
+      Object.fromEntries(
+        Object.entries(rawItem).map(([key, value]) => [
+          key.toLowerCase(),
+          value,
+        ])
+      )
+    );
   };
 
   const fetchCourses = async () => {
@@ -114,11 +127,13 @@ const Courses = () => {
 
       const data = await response.json();
       // console.log(data);
-      console.log("courses", clean(data.value));
-      setCourses(clean(data.value));
+      // console.log("courses", clean(data.value));
+      setPage(1)
+      setAllCourses(clean(data.value));
     } catch (err) {
       console.log("There was an err", err);
-      setCourses([]);
+      setPage(1)
+      setAllCourses([]);
     }
     setLoading(false);
   };
@@ -135,34 +150,56 @@ const Courses = () => {
     fetchCourses();
   };
 
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
   return (
-    
-    <div>
-            <Typography variant="h1" fontWeight={700} color="#294ba6" style={{marginTop:'16px', marginBottom:"16px"}}>Course Search</Typography>
+    <div
+      style={{
+        background: "white",
+        boxShadow: "0 4px 16px #d7d7d7",
+        padding: "64px 16px",
+      }}
+    >
+      <Typography
+        variant="h1"
+        fontWeight={700}
+        color="#294ba6"
+        style={{ marginTop: "16px", marginBottom: "16px" }}
+      >
+        Course Search
+      </Typography>
 
       {loading ? (
         <CircularProgress style={{ margin: 64 }} />
       ) : (
         <>
-          <form
-            onSubmit={handleSubmit}
-            style={{ margin: 16}}
-          >
+          <form onSubmit={handleSubmit} style={{ margin: 16 }}>
             <TextField
-              label="Search for courses"
+              label="Search by title, subject, course id..."
               value={text}
               onChange={handleSearchOnDelay}
               fullWidth
-              style={{ maxWidth: 500 }}
+              style={{ maxWidth: 500, background: "#f6f7fb" }}
+              disabled={params.college !== "purdue"}
             />
           </form>
         </>
       )}
       <div className="course-list">
-        {courses.length
-          ? courses.map((course) => {
+        {courses.length ? (
+          <>
+            {courses.map((course, index) => {
               if (!subjects[course.subjectid]) {
-                return <Course {...course} subject={"MISSING"} />;
+                return (
+                  <Course
+                    {...course}
+                    subject={"MISSING"}
+                    style={{ background: COLORS[index % COLORS.length] }}
+                  />
+                );
               }
 
               return (
@@ -175,12 +212,26 @@ const Courses = () => {
                   <Course
                     {...course}
                     subject={subjects[course.subjectid].abbreviation}
+                    style={{ background: COLORS[index % COLORS.length] }}
                   />
                 </Link>
               );
-            })
-          : !loading && <div>No matching classes 🥺</div>}
+            })}
+          </>
+        ) : (
+          !loading && text && <div>No matching classes 🥺</div>
+        )}
       </div>
+      {allCourses.length > 69 && (
+        <Pagination
+          count={Math.floor((allCourses.length + 69) / 69)}
+          page={page}
+          onChange={handleChange}
+          variant="outlined"
+          shape="rounded"
+          className="pagination"
+        />
+      )}
     </div>
   );
 };

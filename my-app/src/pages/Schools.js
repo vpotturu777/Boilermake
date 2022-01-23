@@ -4,12 +4,53 @@ import { Link, useParams } from "react-router-dom";
 import School from "../components/School";
 
 import "./courses.css";
+import "./schools.css";
 
-const PURDUE = {
-  title: "Purdue University",
-  location: "West Lafayette, IN",
-  imgSrc:"pic.jpg"
-};
+const COLORS = [
+  "#feefe6",
+  "#fff5fb",
+  "#f5feff",
+  "#e8eafc",
+  "#fdfff5",
+]
+const SCHOOLS_LIST = [
+  {
+    title: "Purdue University",
+    location: "West Lafayette, IN",
+    imgSrc: "pic.jpg",
+    abbr: "purdue",
+    enabled: true,
+  },
+  {
+    title: "Indiana University",
+    location: "Bloomington, IN",
+    imgSrc: "jack.jpg",
+    abbr: "iu",
+    enabled: false,
+  },
+  {
+    title: "University of Chicago",
+    location: "Chigago, IL",
+    imgSrc: "seb.jpg",
+    abbr: "uchicago",
+    enabled: false,
+  },
+  {
+    title: "University of Notre Dame",
+            
+    location: "Notre Dame, IN",
+    imgSrc: "vaib.jpg",
+    abbr: "ucsd",
+    enabled: false,
+  },
+  {
+    title: "Monsters University",
+    location: "Monstropolis , ??",
+    imgSrc: "pic.jpg",
+    abbr: "mu",
+    enabled: false,
+  },
+];
 
 const Schools = () => {
   const [text, setText] = useState("");
@@ -21,11 +62,7 @@ const Schools = () => {
     if (!text) return;
     setLoading(true);
 
-    setSchools(
-      Array(Math.floor(Math.random() * 10))
-        .fill()
-        .map((_) => PURDUE)
-    );
+    setSchools(SCHOOLS_LIST);
 
     setLoading(false);
   };
@@ -37,31 +74,50 @@ const Schools = () => {
   };
 
   const handleSubmit = (event) => {
+    event.target.blur();
     event.preventDefault();
     clearTimeout(delayTimer.current);
     fetchCourses();
   };
 
   return (
-    <div>
-      <Typography variant="h1" fontWeight={700} color="#294ba6" style={{marginTop:'16px', marginBottom:"16px"}}>School Search</Typography>
+    <div
+      style={{
+        background: "white",
+        boxShadow: "0 4px 16px #d7d7d7",
+        padding: "64px 16px",
+      }}
+    >
+      <Typography
+        variant="h1"
+        fontWeight={700}
+        color="#294ba6"
+        style={{ marginTop: "16px", marginBottom: "16px" }}
+      >
+        School Search
+      </Typography>
       {loading ? (
         <CircularProgress style={{ margin: 64 }} />
       ) : (
         <>
-          <form onSubmit={handleSubmit} style={{ margin: 16}}>
+          <form onSubmit={handleSubmit} style={{ margin: 16 }}>
             <TextField
-              label="Search for schools"
+              label="Search by name..."
               value={text}
               onChange={handleSearchOnDelay}
               fullWidth
-              style={{ maxWidth: 500 }}
+              style={{ maxWidth: 500, background: '#f6f7fb'}}
             />
           </form>
           <div className="course-list">
             {schools.map((school, index) => (
-              <Link to="/Boilermake/purdue" key={index}>
-                <School {...school} />
+              <Link
+                to={`/Boilermake/${school.abbr}`}
+                key={index}
+                style={{ textDecoration: "none" }}
+                className={school.enabled ? "school" : "disabled"}
+              >
+                <School {...school} style={{background:COLORS[index%COLORS.length]}}/>
               </Link>
             ))}
           </div>

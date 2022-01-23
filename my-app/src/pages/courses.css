@@ -4,4 +4,9 @@
   gap: 8px;
   justify-content: center;
   align-items: stretch;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+.pagination > * {
+  justify-content: center;
 }
