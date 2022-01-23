@@ -9,7 +9,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Close";
 import "./note.css";
 
-function Note() {
+function Note({ course, week }) {
   const [note, setNote] = useState("");
   const [notes, setNotes] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
@@ -27,9 +27,21 @@ function Note() {
       setNotes([]);
       const data = snapshot.val();
       if (data !== null) {
-        Object.values(data).map((todo) => {
-          setNotes((oldArray) => [...oldArray, todo]);
-        });
+        const allDoes = Object.values(data);
+        console.log(allDoes)
+        const filtered = allDoes.reduce((out, todo) => {
+          const tokens = todo.todo.split(':::')
+          if (tokens[0] === course && tokens[1] === week) {
+            out.push({...todo, todo:tokens[2]})
+          }
+          return out
+        },[]
+        );
+        console.log(filtered)
+        setNotes(filtered);
+        // Object.values(data).map((todo) => {
+        //   setNotes((oldArray) => [...oldArray, todo]);
+        // });
       }
     });
   }, []);
@@ -38,7 +50,7 @@ function Note() {
   const writeToDatabase = () => {
     const uuid = uid();
     set(ref(db, `/${uuid}`), {
-      todo: note,
+      todo: `${course}:::${week}:::${note}`,
       uuid,
     });
 
@@ -55,7 +67,7 @@ function Note() {
 
   const handleSubmitChange = () => {
     update(ref(db, `/${updateUuid}`), {
-      todo: updateNote,
+      todo: `${course}:::${week}:::${updateNote}`,
       uuid: updateUuid,
     });
 
@@ -75,13 +87,15 @@ function Note() {
         style={{
           display: "flex",
           overflowX: "auto",
-          gap:12,
+          gap: 12,
           marginRight: 24,
           background: "#f6f7f8",
           borderRadius: 8,
           padding: 24,
+          flex: 1,
         }}
       >
+        {!notes.length && <Typography variant="h5">No notes yet...</Typography>}
         {notes.map((todo) => (
           <div key={todo.uuid} style={{ position: "relative", minWidth: 140 }}>
             <TextField
@@ -91,7 +105,7 @@ function Note() {
               disabled={todo.uuid !== updateUuid}
               className="note-disabled"
               onChange={(e) => setUpdateNode(e.target.value)}
-              style={{background:'white'}}
+              style={{ background: "white" }}
             />
             {(!isEdit || todo.uuid !== updateUuid) && (
               <>
