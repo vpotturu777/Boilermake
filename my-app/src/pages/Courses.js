@@ -5,9 +5,12 @@ import { Link, useParams } from "react-router-dom";
 import Course from "../components/Course";
 import "./courses.css";
 const API_BASE = "https://note-izme-senpai.azurewebsites.net/odata";
-const COURSES = `/Courses`;
+const COURSES = `/Courses?`;
 const SUBJECTS = `/Subjects`;
-const TITLE_CONTAINS = (text) => `?$filter=contains(Title, '${text}')`;
+const TITLE_CONTAINS = (text) => `$filter=contains(Title, '${text}')`;
+const SUBJECT_EQUAL = (subj) => `$filter=Subject/Abbreviation eq '${subj}'`;
+const NUMBER_CONTAINS = (num) => `contains(Number,'${num}')`;
+
 const ASCENDING_NUMBER = `&$orderby=Number asc`;
 /**
  *
@@ -20,6 +23,18 @@ const ASCENDING_NUMBER = `&$orderby=Number asc`;
  *  "Title": string,
  * }
  */
+
+const splitSubjectNumber = (subjectNumber) => {
+  const match = /[0-9]+$/.exec(subjectNumber);
+  if (match) {
+    return [
+      subjectNumber.substring(0, match.index).trim().toUpperCase(),
+      subjectNumber.substring(match.index, subjectNumber.length).trim(),
+    ];
+  }
+
+  return null;
+};
 
 const Courses = () => {
   const [text, setText] = useState("");
@@ -59,9 +74,27 @@ const Courses = () => {
     setLoading(true);
     try {
       // console.log(`${API_BASE}${COURSES}${TITLE_CONTAINS(text)}${ASCENDING_NUMBER}`);
-      const response = await fetch(
-        `${API_BASE}${COURSES}${TITLE_CONTAINS(text)}${ASCENDING_NUMBER}`
-      );
+      const isSubjectNumber = splitSubjectNumber(text);
+
+      // I know
+      let response;
+
+      if (isSubjectNumber) {
+        const abbr = isSubjectNumber[0];
+        const num = isSubjectNumber[1];
+        const url = abbr
+          ? `${API_BASE}${COURSES}${SUBJECT_EQUAL(abbr)} and ${NUMBER_CONTAINS(
+              num
+            )}`
+          : `${API_BASE}${COURSES}$filter=${NUMBER_CONTAINS(num)}`;
+
+        console.log(url)
+        response = await fetch(url);
+      } else {
+        response = await fetch(
+          `${API_BASE}${COURSES}${TITLE_CONTAINS(text)}${ASCENDING_NUMBER}`
+        );
+      }
       // console.log(response)
       const data = await response.json();
       // console.log(data);
