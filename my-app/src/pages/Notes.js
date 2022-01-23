@@ -12,6 +12,9 @@ const Notes = () => {
   // console.log(params)
   return (
     <div>
+      <Typography variant="h2" fontWeight={700} style={{marginTop:32}}>
+        {params.course}
+      </Typography>
       {lectures.map((lecture) => (
         <div
           style={{
@@ -31,7 +34,7 @@ const Notes = () => {
           >
             {`Week ${lecture + 1}`}
           </Typography>
-          <Note course={params.course} week={(lecture+1).toString()}/>
+          <Note course={params.course} week={(lecture + 1).toString()} />
         </div>
       ))}
     </div>
