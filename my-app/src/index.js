@@ -14,10 +14,10 @@ ReactDOM.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route path="" element={<Schools />}/>
-          <Route path=":p/:college" element={<Courses />}/>
-          <Route path=":p/:college/:course" element={<Notes />}/>
-          <Route path=":p/:college/:course/:lecture" element={<Lectures />}/>
+          <Route path="Boilermake" element={<Schools />}/>
+          <Route path="Boilermake/:college" element={<Courses />}/>
+          <Route path="Boilermake/:college/:course" element={<Notes />}/>
+          <Route path="Boilermake/:college/:course/:lecture" element={<Lectures />}/>
           <Route
             path="*"
             element={
