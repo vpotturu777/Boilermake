@@ -60,14 +60,16 @@ const Courses = () => {
   }, []);
 
   const clean = (rawList) => {
-    return rawList.map((rawItem) =>
-      Object.fromEntries(
-        Object.entries(rawItem).map(([key, value]) => [
-          key.toLowerCase(),
-          value,
-        ])
-      )
-    );
+    return rawList
+      .slice(0, 69)
+      .map((rawItem) =>
+        Object.fromEntries(
+          Object.entries(rawItem).map(([key, value]) => [
+            key.toLowerCase(),
+            value,
+          ])
+        )
+      );
   };
 
   const fetchCourses = async () => {
@@ -78,31 +80,33 @@ const Courses = () => {
 
       // I know
       let url;
-      
+
       if (isSubjectNumber) {
         const abbr = isSubjectNumber[0];
         const num = isSubjectNumber[1];
         url = abbr
           ? `${API_BASE}${COURSES}${SUBJECT_EQUAL(abbr)} and ${NUMBER_CONTAINS(
               num
-            )}`
-          : `${API_BASE}${COURSES}$filter=${NUMBER_CONTAINS(num)}`;
+            )}${ASCENDING_NUMBER}`
+          : `${API_BASE}${COURSES}$filter=${NUMBER_CONTAINS(
+              num
+            )}${ASCENDING_NUMBER}`;
 
         // console.log(url)
         // response = await fetch(url);
-      }
-      else if (text.length <= 4) {
-        const possibleAbbr = text.toUpperCase()
-        Object.values(subjects).some(subj => {
+      } else if (text.length <= 4) {
+        const possibleAbbr = text.toUpperCase();
+        Object.values(subjects).some((subj) => {
           if (subj.abbreviation === possibleAbbr) {
-            url = `${API_BASE}${COURSES}${SUBJECT_EQUAL(possibleAbbr)}`
+            url = `${API_BASE}${COURSES}${SUBJECT_EQUAL(
+              possibleAbbr
+            )}${ASCENDING_NUMBER}`;
             return true;
           }
           return false;
-        })
-      }
-      else if (!url) {
-        url = `${API_BASE}${COURSES}${TITLE_CONTAINS(text)}${ASCENDING_NUMBER}`
+        });
+      } else if (!url) {
+        url = `${API_BASE}${COURSES}${TITLE_CONTAINS(text)}${ASCENDING_NUMBER}`;
       }
       const response = await fetch(url);
       // console.log(response)
@@ -146,19 +150,30 @@ const Courses = () => {
       )}
       <div className="course-list">
         {courses.length ? (
-          courses.map((course) => (
-            <Link
-              to={`/${params.college}/${
-                subjects[course.subjectid].abbreviation
-              }-${course.number}`}
-              key={course.id}
-            >
-              <Course
-                {...course}
-                subject={subjects[course.subjectid].abbreviation}
-              />
-            </Link>
-          ))
+          courses.map((course) => {
+            if (!subjects[course.subjectid]) {
+              return (
+                <Course
+                  {...course}
+                  subject={"MISSING"}
+                />
+              );
+            }
+
+            return (
+              <Link
+                to={`/${params.college}/${
+                  subjects[course.subjectid].abbreviation
+                }-${course.number}`}
+                key={course.id}
+              >
+                <Course
+                  {...course}
+                  subject={subjects[course.subjectid].abbreviation}
+                />
+              </Link>
+            );
+          })
         ) : (
           <div>No matching classes 🥺</div>
         )}
