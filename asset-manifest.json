@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Boilermake/static/css/main.ca182dc6.css",
+    "main.js": "/Boilermake/static/js/main.9f0bc27b.js",
+    "static/js/787.28cb0dcd.chunk.js": "/Boilermake/static/js/787.28cb0dcd.chunk.js",
+    "index.html": "/Boilermake/index.html",
+    "main.ca182dc6.css.map": "/Boilermake/static/css/main.ca182dc6.css.map",
+    "main.9f0bc27b.js.map": "/Boilermake/static/js/main.9f0bc27b.js.map",
+    "787.28cb0dcd.chunk.js.map": "/Boilermake/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ca182dc6.css",
+    "static/js/main.9f0bc27b.js"
+  ]
+}
