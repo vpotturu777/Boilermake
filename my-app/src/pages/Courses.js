@@ -73,6 +73,7 @@ const Courses = () => {
   };
 
   const fetchCourses = async () => {
+    if (!text) return;
     setLoading(true);
     try {
       // console.log(`${API_BASE}${COURSES}${TITLE_CONTAINS(text)}${ASCENDING_NUMBER}`);

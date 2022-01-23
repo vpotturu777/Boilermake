@@ -7,12 +7,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Courses from "./pages/Courses";
 import Notes from "./pages/Notes";
 import Lectures from "./pages/Lectures";
+import Schools from "./pages/Schools";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
+          <Route path="" element={<Schools />}/>
           <Route path=":college" element={<Courses />}/>
           <Route path=":college/:course" element={<Notes />}/>
           <Route path=":college/:course/:lecture" element={<Lectures />}/>

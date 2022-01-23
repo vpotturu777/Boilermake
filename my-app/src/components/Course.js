@@ -5,7 +5,7 @@ const Course = ({ subject = "DF", title, number }) => {
   return (
     <Card variant="outlined" sx={{ width: 220, height: '100%' }}>
       <CardContent>
-        <Typography>{`${subject}-${number}`}</Typography>
+        <Typography variant="h5" fontWeight={700}>{`${subject}-${number}`}</Typography>
         <Typography>{title}</Typography>
       </CardContent>
     </Card>
