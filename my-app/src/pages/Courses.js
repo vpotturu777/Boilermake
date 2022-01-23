@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 
 import Course from "../components/Course";
 import "./courses.css";
-const API_BASE = "http://localhost:4200/odata";
+const API_BASE = "https://note-izme-senpai.azurewebsites.net/odata";
 const COURSES = `/Courses`;
 const SUBJECTS = `/Subjects`;
 const TITLE_CONTAINS = (text) => `?$filter=contains(Title, '${text}')`;
