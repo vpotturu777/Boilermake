@@ -33,7 +33,7 @@ export default function Nav() {
     setAnchorElUser(null);
   };
 
-  const pages = ['Products', 'Pricing', 'Blog'];
+  const pages = ['Products', 'Pricing', 'Blog', "iOS App"];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
   return (
