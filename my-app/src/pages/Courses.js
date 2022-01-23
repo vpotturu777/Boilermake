@@ -77,25 +77,36 @@ const Courses = () => {
       const isSubjectNumber = splitSubjectNumber(text);
 
       // I know
-      let response;
-
+      let url;
+      
       if (isSubjectNumber) {
         const abbr = isSubjectNumber[0];
         const num = isSubjectNumber[1];
-        const url = abbr
+        url = abbr
           ? `${API_BASE}${COURSES}${SUBJECT_EQUAL(abbr)} and ${NUMBER_CONTAINS(
               num
             )}`
           : `${API_BASE}${COURSES}$filter=${NUMBER_CONTAINS(num)}`;
 
-        console.log(url)
-        response = await fetch(url);
-      } else {
-        response = await fetch(
-          `${API_BASE}${COURSES}${TITLE_CONTAINS(text)}${ASCENDING_NUMBER}`
-        );
+        // console.log(url)
+        // response = await fetch(url);
       }
+      else if (text.length <= 4) {
+        const possibleAbbr = text.toUpperCase()
+        Object.values(subjects).some(subj => {
+          if (subj.abbreviation === possibleAbbr) {
+            url = `${API_BASE}${COURSES}${SUBJECT_EQUAL(possibleAbbr)}`
+            return true;
+          }
+          return false;
+        })
+      }
+      else if (!url) {
+        url = `${API_BASE}${COURSES}${TITLE_CONTAINS(text)}${ASCENDING_NUMBER}`
+      }
+      const response = await fetch(url);
       // console.log(response)
+
       const data = await response.json();
       // console.log(data);
       console.log("courses", clean(data.value));
