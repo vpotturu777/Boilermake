@@ -118,6 +118,7 @@ const Courses = () => {
       setCourses(clean(data.value));
     } catch (err) {
       console.log("There was an err", err);
+      setCourses([]);
     }
     setLoading(false);
   };
@@ -139,45 +140,40 @@ const Courses = () => {
       {loading ? (
         <CircularProgress style={{ margin: 64 }} />
       ) : (
-        <form onSubmit={handleSubmit} style={{ margin: 16 }}>
-          <TextField
-            label="Search for courses"
-            value={text}
-            onChange={handleSearchOnDelay}
-            fullWidth
-            style={{ maxWidth: 500 }}
-          />
-        </form>
+        <>
+          <form onSubmit={handleSubmit} style={{ margin: 16 }}>
+            <TextField
+              label="Search for courses"
+              value={text}
+              onChange={handleSearchOnDelay}
+              fullWidth
+              style={{ maxWidth: 500 }}
+            />
+          </form>
+        </>
       )}
       <div className="course-list">
-        {courses.length ? (
-          courses.map((course) => {
-            if (!subjects[course.subjectid]) {
-              return (
-                <Course
-                  {...course}
-                  subject={"MISSING"}
-                />
-              );
-            }
+        {courses.length
+          ? courses.map((course) => {
+              if (!subjects[course.subjectid]) {
+                return <Course {...course} subject={"MISSING"} />;
+              }
 
-            return (
-              <Link
-                to={`/${params.college}/${
-                  subjects[course.subjectid].abbreviation
-                }-${course.number}`}
-                key={course.id}
-              >
-                <Course
-                  {...course}
-                  subject={subjects[course.subjectid].abbreviation}
-                />
-              </Link>
-            );
-          })
-        ) : (
-          <div>No matching classes 🥺</div>
-        )}
+              return (
+                <Link
+                  to={`/${params.college}/${
+                    subjects[course.subjectid].abbreviation
+                  }-${course.number}`}
+                  key={course.id}
+                >
+                  <Course
+                    {...course}
+                    subject={subjects[course.subjectid].abbreviation}
+                  />
+                </Link>
+              );
+            })
+          : !loading && <div>No matching classes 🥺</div>}
       </div>
     </div>
   );
