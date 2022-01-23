@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { TextField, CircularProgress } from "@mui/material";
+import { TextField, CircularProgress, Typography } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 
 import Course from "../components/Course";
@@ -136,12 +136,18 @@ const Courses = () => {
   };
 
   return (
+    
     <div>
+            <Typography variant="h1" fontWeight={700} color="#294ba6" style={{marginTop:'16px', marginBottom:"16px"}}>Course Search</Typography>
+
       {loading ? (
         <CircularProgress style={{ margin: 64 }} />
       ) : (
         <>
-          <form onSubmit={handleSubmit} style={{ margin: 16 }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{ margin: 16}}
+          >
             <TextField
               label="Search for courses"
               value={text}
