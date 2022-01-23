@@ -160,7 +160,7 @@ const Courses = () => {
             </Link>
           ))
         ) : (
-          <div>No matching classes (╥︣﹏᷅╥)</div>
+          <div>No matching classes 🥺</div>
         )}
       </div>
     </div>
