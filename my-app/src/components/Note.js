@@ -2,26 +2,33 @@ import { db } from "../firebase";
 import { uid } from "uid";
 import { set, ref, onValue, remove, update } from "firebase/database";
 import { useState, useEffect } from "react";
-
+import { Button, TextField, IconButton, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import CancelIcon from "@mui/icons-material/DoNotDisturb";
+import CheckIcon from "@mui/icons-material/Check";
+import DeleteIcon from "@mui/icons-material/Close";
+import "./note.css";
 
 function Note() {
-  const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([]);
+  const [note, setNote] = useState("");
+  const [notes, setNotes] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
-  const [tempUuid, setTempUuid] = useState("");
+  const [updateUuid, setUpdateUuid] = useState("");
+
+  const [updateNote, setUpdateNode] = useState("");
 
   const handleTodoChange = (e) => {
-    setTodo(e.target.value);
+    setNote(e.target.value);
   };
 
   //read
   useEffect(() => {
     onValue(ref(db), (snapshot) => {
-      setTodos([]);
+      setNotes([]);
       const data = snapshot.val();
       if (data !== null) {
         Object.values(data).map((todo) => {
-          setTodos((oldArray) => [...oldArray, todo]);
+          setNotes((oldArray) => [...oldArray, todo]);
         });
       }
     });
@@ -31,28 +38,30 @@ function Note() {
   const writeToDatabase = () => {
     const uuid = uid();
     set(ref(db, `/${uuid}`), {
-      todo,
+      todo: note,
       uuid,
     });
 
-    setTodo("");
+    setNote("");
   };
 
   //update
   const handleUpdate = (todo) => {
     setIsEdit(true);
-    setTempUuid(todo.uuid);
-    setTodo(todo.todo);
+    setUpdateNode(todo.todo);
+    setUpdateUuid(todo.uuid);
+    // setNote(todo.todo);
   };
 
   const handleSubmitChange = () => {
-    update(ref(db, `/${tempUuid}`), {
-      todo,
-      uuid: tempUuid,
+    update(ref(db, `/${updateUuid}`), {
+      todo: updateNote,
+      uuid: updateUuid,
     });
 
-    setTodo("");
+    // setNote("");
     setIsEdit(false);
+    setUpdateUuid("");
   };
 
   //delete
@@ -61,31 +70,103 @@ function Note() {
   };
 
   return (
-    <>
-      <input type="text" value={todo} onChange={handleTodoChange} />
-      {isEdit ? (
-        <>
-          <button onClick={handleSubmitChange}>Submit Change</button>
-          <button
-            onClick={() => {
-              setIsEdit(false);
-              setTodo("");
-            }}
-          >
-            X
-          </button>
-        </>
-      ) : (
-        <button onClick={writeToDatabase}>submit</button>
-      )}
-      {todos.map((todo) => (
-        <>
-          <h1>{todo.todo}</h1>
-          <button onClick={() => handleUpdate(todo)}>update</button>
-          <button onClick={() => handleDelete(todo)}>delete</button>
-        </>
-      ))}
-    </>
+    <div style={{ display: "flex" }}>
+      <div
+        style={{
+          display: "flex",
+          overflowX: "auto",
+          gap:12,
+          marginRight: 24,
+          background: "#f6f7f8",
+          borderRadius: 8,
+          padding: 24,
+        }}
+      >
+        {notes.map((todo) => (
+          <div key={todo.uuid} style={{ position: "relative", minWidth: 140 }}>
+            <TextField
+              type="text"
+              multiline
+              value={todo.uuid !== updateUuid ? todo.todo : updateNote}
+              disabled={todo.uuid !== updateUuid}
+              className="note-disabled"
+              onChange={(e) => setUpdateNode(e.target.value)}
+              style={{background:'white'}}
+            />
+            {(!isEdit || todo.uuid !== updateUuid) && (
+              <>
+                <IconButton
+                  aria-label="edit"
+                  onClick={() => handleUpdate(todo)}
+                  style={{ padding: 4, position: "absolute", right: 0, top: 0 }}
+                >
+                  <EditIcon />
+                </IconButton>
+                <IconButton
+                  color="error"
+                  aria-label="delete"
+                  onClick={() => handleDelete(todo)}
+                  style={{
+                    padding: 4,
+                    position: "absolute",
+                    left: -12,
+                    top: -12,
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </>
+            )}
+
+            {isEdit && todo.uuid === updateUuid && (
+              <div>
+                <IconButton
+                  color="success"
+                  aria-label="update"
+                  onClick={() => handleSubmitChange()}
+                  style={{ padding: 4 }}
+                >
+                  <CheckIcon />
+                </IconButton>
+                <IconButton
+                  color="error"
+                  aria-label="update"
+                  onClick={() => {
+                    setUpdateUuid("");
+                    setIsEdit(false);
+                  }}
+                  style={{ padding: 4 }}
+                >
+                  <CancelIcon />
+                </IconButton>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "end",
+          minWidth: 140,
+        }}
+      >
+        <Typography variant="h6" style={{ width: "100%", textAlign: "left" }}>
+          Add Note
+        </Typography>
+        <TextField
+          type="text"
+          multiline
+          minRows={6}
+          value={note}
+          onChange={handleTodoChange}
+        />
+        <Button variant="contained" onClick={writeToDatabase}>
+          Submit
+        </Button>
+      </div>
+    </div>
   );
 }
 

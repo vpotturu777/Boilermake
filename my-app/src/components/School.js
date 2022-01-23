@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import { Card, CardContent, Typography, CardMedia } from "@mui/material";
 
 const School = ({ title, location, imgSrc, enabled, ...other }) => {

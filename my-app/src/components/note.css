@@ -1,0 +1,4 @@
+.note-disabled textarea {
+  color: black !important;
+  -webkit-text-fill-color: unset !important;
+}

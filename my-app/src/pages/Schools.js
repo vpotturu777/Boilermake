@@ -6,13 +6,7 @@ import School from "../components/School";
 import "./courses.css";
 import "./schools.css";
 
-const COLORS = [
-  "#feefe6",
-  "#fff5fb",
-  "#f5feff",
-  "#e8eafc",
-  "#fdfff5",
-]
+const COLORS = ["#feefe6", "#fff5fb", "#f5feff", "#e8eafc", "#fdfff5"];
 const SCHOOLS_LIST = [
   {
     title: "Purdue University",
@@ -37,7 +31,7 @@ const SCHOOLS_LIST = [
   },
   {
     title: "University of Notre Dame",
-            
+
     location: "Notre Dame, IN",
     imgSrc: "vaib.jpg",
     abbr: "ucsd",
@@ -81,49 +75,68 @@ const Schools = () => {
   };
 
   return (
-    <div
-      style={{
-        background: "white",
-        boxShadow: "0 4px 16px #d7d7d7",
-        padding: "64px 16px",
-      }}
-    >
-      <Typography
-        variant="h1"
-        fontWeight={700}
-        color="#294ba6"
-        style={{ marginTop: "16px", marginBottom: "16px" }}
+    <>
+      <div
+        style={{
+          background: "white",
+          boxShadow: "0 4px 16px #d7d7d7",
+          padding: "64px 16px",
+        }}
       >
-        School Search
-      </Typography>
-      {loading ? (
-        <CircularProgress style={{ margin: 64 }} />
-      ) : (
-        <>
-          <form onSubmit={handleSubmit} style={{ margin: 16 }}>
-            <TextField
-              label="Search by name..."
-              value={text}
-              onChange={handleSearchOnDelay}
-              fullWidth
-              style={{ maxWidth: 500, background: '#f6f7fb'}}
-            />
-          </form>
-          <div className="course-list">
-            {schools.map((school, index) => (
-              <Link
-                to={`/Boilermake/${school.abbr}`}
-                key={index}
-                style={{ textDecoration: "none" }}
-                className={school.enabled ? "school" : "disabled"}
-              >
-                <School {...school} style={{background:COLORS[index%COLORS.length]}}/>
-              </Link>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
+        <Typography
+          variant="h1"
+          fontWeight={700}
+          color="#294ba6"
+          style={{ marginTop: "16px", marginBottom: "16px" }}
+        >
+          School Search
+        </Typography>
+        {loading ? (
+          <CircularProgress style={{ margin: 64 }} />
+        ) : (
+          <>
+            <form onSubmit={handleSubmit} style={{ margin: 16 }}>
+              <TextField
+                label="Search by name..."
+                value={text}
+                onChange={handleSearchOnDelay}
+                fullWidth
+                style={{ maxWidth: 500, background: "#f6f7fb" }}
+              />
+            </form>
+            <div className="course-list">
+              {schools.map((school, index) => (
+                <Link
+                  to={`/Boilermake/${school.abbr}`}
+                  key={index}
+                  style={{ textDecoration: "none" }}
+                  className={school.enabled ? "school" : "disabled"}
+                >
+                  <School
+                    {...school}
+                    style={{ background: COLORS[index % COLORS.length] }}
+                  />
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+      <div className="content">
+        <div>
+          <Typography variant="h3" fontWeight={500}>
+            Find fresh and authentic notes for free
+          </Typography>
+          <Typography variant="p">
+            Having notes is better than having no notes. Check out what notes
+            your classmates have made for your classes. Consider contributing
+            your own notes if you want to help the community.
+          </Typography>
+        </div>
+
+        <img src="pic.jpg" alt="good notes" style={{borderRadius:12}} />
+      </div>
+    </>
   );
 };
 

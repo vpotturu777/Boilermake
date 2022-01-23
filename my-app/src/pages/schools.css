@@ -1,15 +1,23 @@
-.disabled {
-
-}
-
 .school:hover {
   /* background-color: rgb(168, 168, 168); */
-  scale:1.05;
+  scale: 1.05;
   z-index: 100;
   transition: scale 300ms ease;
   box-shadow: 0 4px 16px #797979;
 }
 
 .disabled {
-  filter: grayscale(1)
+  filter: grayscale(1);
+}
+
+.content {
+  display: flex;
+  margin: 64px auto;
+  max-width: 1000px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.content > * {
+  margin: 16px;
+  max-width: 400px;
 }
