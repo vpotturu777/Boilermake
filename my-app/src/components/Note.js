@@ -176,7 +176,7 @@ function Note({ course, week }) {
           value={note}
           onChange={handleTodoChange}
         />
-        <Button variant="contained" onClick={writeToDatabase}>
+        <Button variant="contained" onClick={writeToDatabase} style={{marginTop:8}}>
           Submit
         </Button>
       </div>
